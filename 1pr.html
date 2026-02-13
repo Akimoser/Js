@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Исходные данные
+const users = [
+  { id: 1, name: "Anna", age: 22, city: "Moscow", isActive: true },
+  { id: 2, name: "Oleg", age: 17, city: "Kazan", isActive: false },
+  { id: 3, name: "Ivan", age: 30, city: "Moscow", isActive: true },
+  { id: 4, name: "Maria", age: 25, city: "Sochi", isActive: false }
+];
+
+// Задание 1. Фильтрация пользователей (только активные)
+function getActiveUsers(usersArray) {
+  let activeUsers = usersArray.filter(function(user) {
+    return user.isActive === true;
+  });
+  return activeUsers;
+}
+
+// Задание 2. Получение имён пользователей (стрелочная функция)
+const getUserNames = (usersArray) => {
+  let names = usersArray.map(function(user) {
+    return user.name;
+  });
+  return names;
+};
+
+// Задание 3. Поиск пользователя по id
+function findUserById(usersArray, id) {
+  let foundUser = usersArray.find(function(user) {
+    return user.id === id;
+  });
+  if (foundUser === undefined) {
+    return null;
+  } else {
+    return foundUser;
+  }
+}
+
+// Задание 4. Подсчёт статистики (общее, активные, неактивные)
+function getUsersStatistics(usersArray) {
+  let total = usersArray.length;
+  let active = 0;
+  let inactive = 0;
+  for (let i = 0; i < usersArray.length; i++) {
+    if (usersArray[i].isActive === true) {
+      active++;
+    } else {
+      inactive++;
+    }
+  }
+  return { total: total, active: active, inactive: inactive };
+}
+
+// Задание 5. Средний возраст пользователей
+function getAverageAge(usersArray) {
+  if (usersArray.length === 0) {
+    return 0;
+  }
+  let sum = 0;
+  for (let i = 0; i < usersArray.length; i++) {
+    sum = sum + usersArray[i].age;
+  }
+  return sum / usersArray.length;
+}
+
+// Задание 6. Группировка пользователей по городам
+function groupUsersByCity(usersArray) {
+  let grouped = {};
+  for (let i = 0; i < usersArray.length; i++) {
+    let city = usersArray[i].city;
+    if (grouped[city] === undefined) {
+      grouped[city] = [];
+    }
+    grouped[city].push(usersArray[i]);
+  }
+  return grouped;
+}
+console.log('Задание 1 (активные):', getActiveUsers(users));
+console.log('Задание 2 (имена):', getUserNames(users));
+console.log('Задание 3 (поиск id=2):', findUserById(users, 2));
+console.log('Задание 3 (поиск id=99):', findUserById(users, 99));
+console.log('Задание 4 (статистика):', getUsersStatistics(users));
+console.log('Задание 5 (средний возраст):', getAverageAge(users));
+console.log('Задание 6 (группировка по городам):', groupUsersByCity(users));
+    </script>
+</body>
+</html>
