@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+let expenses = [];
+
+function addExpense(title, amount, category) {
+  if (typeof title !== 'string' || title.trim() === '') {
+    console.log('Ошибка: название не может быть пустым');
+    return;
+  }
+  if (typeof amount !== 'number' || amount <= 0) {
+    console.log('Ошибка: сумма должна быть положительным числом');
+    return;
+  }
+  if (typeof category !== 'string' || category.trim() === '') {
+    console.log('Ошибка: категория не может быть пустой');
+    return;
+  }
+  const newExpense = {
+    id: Date.now(),
+    title: title.trim(),
+    amount: amount,
+    category: category.trim()
+  };
+  expenses.push(newExpense);
+  console.log('Расход добавлен:', newExpense);
+}
+
+function printAllExpenses() {
+  if (expenses.length === 0) {
+    console.log('Список расходов пуст');
+    return;
+  }
+  console.log('Все расходы:');
+  expenses.forEach(exp => {
+    console.log(`ID: ${exp.id} | ${exp.title} | ${exp.amount} руб. | ${exp.category}`);
+  });
+}
+
+function getTotalAmount() {
+  const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  console.log(`Общая сумма расходов: ${total} руб.`);
+  return total;
+}
+
+function getExpensesByCategory(category) {
+  if (typeof category !== 'string' || category.trim() === '') {
+    console.log('Ошибка: категория не может быть пустой');
+    return [];
+  }
+  const filtered = expenses.filter(exp => exp.category.toLowerCase() === category.trim().toLowerCase());
+  const total = filtered.reduce((sum, exp) => sum + exp.amount, 0);
+  console.log(`Категория "${category}": ${filtered.length} расход(ов) на сумму ${total} руб.`);
+  return filtered;
+}
+
+function findExpenseByTitle(searchString) {
+  if (typeof searchString !== 'string' || searchString.trim() === '') {
+    console.log('Ошибка: строка поиска не может быть пустой');
+    return null;
+  }
+  const found = expenses.find(exp => exp.title.toLowerCase().includes(searchString.toLowerCase()));
+  if (found) {
+    console.log('Найден расход:', found);
+    return found;
+  } else {
+    console.log('Расход с таким названием не найден');
+    return null;
+  }
+}
+
+const expenseTracker = {
+  expenses: expenses,
+  addExpense: function(title, amount, category) {
+    return addExpense(title, amount, category);
+  },
+  getTotalAmount: function() {
+    return getTotalAmount();
+  },
+  getExpensesByCategory: function(category) {
+    return getExpensesByCategory(category);
+  },
+  findExpenseByTitle: function(searchString) {
+    return findExpenseByTitle(searchString);
+  },
+  deleteExpenseById: function(id) {
+    const index = this.expenses.findIndex(exp => exp.id === id);
+    if (index === -1) {
+      console.log('Ошибка: расход с таким id не найден');
+      return false;
+    }
+    const deleted = this.expenses.splice(index, 1)[0];
+    console.log('Расход удалён:', deleted);
+    return true;
+  },
+  getCategoryStatistics: function() {
+    const stats = {};
+    this.expenses.forEach(exp => {
+      if (!stats[exp.category]) {
+        stats[exp.category] = { count: 0, total: 0 };
+      }
+      stats[exp.category].count += 1;
+      stats[exp.category].total += exp.amount;
+    });
+    console.log('Статистика по категориям:');
+    for (let cat in stats) {
+      console.log(`${cat}: ${stats[cat].count} расх., сумма ${stats[cat].total} руб.`);
+    }
+    return stats;
+  }
+};
+
+// Пример использования
+addExpense('Кофе', 150, 'Еда');
+addExpense('Обед', 350, 'Еда');
+addExpense('Такси', 500, 'Транспорт');
+addExpense('Книга', 700, 'Развлечения');
+addExpense('', 100, 'Еда');           // ошибка
+addExpense('Кино', -200, 'Развлечения'); // ошибка
+addExpense('Интернет', 600, '');       // ошибка
+
+printAllExpenses();
+getTotalAmount();
+getExpensesByCategory('Еда');
+findExpenseByTitle('такс');
+
+expenseTracker.deleteExpenseById(expenses[0].id);
+printAllExpenses();
+expenseTracker.getCategoryStatistics();
+    </script>
+</body>
+</html>
